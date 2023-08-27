@@ -1,35 +1,14 @@
 <h2>Flights</h2>
 
-<% if @flights.exists? %>
-  <table>
-    <tr>
-      <th>Code</th>
-      <th>Departure Airport</th>
-      <th>Destination</th>
-      <th>Start Time</th>
-      <th>Flight Time</th>
-    </tr>
-    <% @flights.each do |flight| %>
-      <tr>
-        <td><%= flight.code %></td>
-        <td><%= flight.arrival_airport.place %></td>
-        <td><%= flight.departure_airport.place %></td>
-        <td><%= flight.start %></td>
-        <td><%= flight.duration %></td>
-      </tr>
-    <% end %>  
-  </table>
-<% end %>
-
 <%= form_with model: Flight.new, method: :get do |f| %>
   <div>
   <%= f.label :departure_code, "Departure Airport" %>
-  <%= f.select :departure_code, Airport.all.map { |a| [a.place, a.code] } %>
+  <%= f.select :departure_code, Airport.all.map { |a| [a.place, a.id] }, selected: @select_departure %>
   </div>
 
   <div>
     <%= f.label :arrival_code, "Arrival Airport" %>
-    <%= f.select :arrival_code, Airport.all.map { |a| [a.place, a.code] } %>
+    <%= f.select :arrival_code, Airport.all.map { |a| [a.place, a.id] }, selected: @select_arrival %>
   </div>
   
   <div>
@@ -39,8 +18,33 @@
 
   <div>
     <%= f.label :date %>
-    <%= f.select :date, Flight.all.order(:start).map { |fl| [fl.start_date_readable, fl.start_date_8d] }.uniq %>
+    <%= f.select :date, Flight.all.order(:start).map { |fl| [fl.start_date_readable, fl.start_date_8d] }.uniq, selected: @select_date %>
   </div>
 
   <div><%= f.submit "Search Flights" %></div>
+<% end %>
+
+<% if @flights %>
+  <%= form_with model: Flight.new, method: :get do |f| %>
+    <table>
+      <tr>
+        <th>Book?</th>
+        <th>Code</th>
+        <th>Departure Airport</th>
+        <th>Destination</th>
+        <th>Start Time</th>
+        <th>Flight Time</th>
+      </tr>
+      <% @flights.each do |flight| %>
+        <tr>
+          <td></td>
+          <td><%= flight.code %></td>
+          <td><%= flight.departure_airport.place %></td>
+          <td><%= flight.arrival_airport.place %></td>
+          <td><%= flight.start %></td>
+          <td><%= flight.duration %></td>
+        </tr>
+      <% end %>  
+    </table>
+  <% end %>
 <% end %>

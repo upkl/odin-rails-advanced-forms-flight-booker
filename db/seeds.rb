@@ -39,3 +39,13 @@ Airport.create!(code: 'CDG', place: 'Paris')
     duration: format('%<h>02d:%<m>02d', h: rand(13), m: rand(60))
   )
 end
+
+400.times do
+  Flight.create(
+    code: format("#{('A'..'Z').to_a.sample}#{('A'..'Z').to_a.sample}%03d", rand(1..999)),
+    departure_airport: Airport.all.sample,
+    arrival_airport: Airport.all.sample,
+    start: (28.days + rand(1440).minutes).from_now,
+    duration: format('%<h>02d:%<m>02d', h: rand(13), m: rand(60))
+  )
+end
