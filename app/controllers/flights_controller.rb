@@ -24,5 +24,6 @@ class FlightsController < ApplicationController
     @select_departure = params[:flight][:departure_code]
     @select_arrival = params[:flight][:arrival_code]
     @select_date = params[:flight][:date]
+    @select_tickets = params[:flight][:num_tickets]
   end
 end

@@ -13,7 +13,7 @@
   
   <div>
     <%= f.label :num_tickets, "Number of Passengers" %>
-    <%= f.select :num_tickets, 1..4, selected: 2 %>
+    <%= f.select :num_tickets, 1..4, selected: @select_tickets || 2 %>
   </div>
 
   <div>
@@ -25,7 +25,8 @@
 <% end %>
 
 <% if @flights %>
-  <%= form_with model: Flight.new, method: :get do |f| %>
+  <%= form_with url: '/bookings/new', method: :get do |f| %>
+  <%= f.hidden_field :num_tickets, value: @select_tickets %>
     <table>
       <tr>
         <th>Book?</th>
@@ -37,8 +38,8 @@
       </tr>
       <% @flights.each do |flight| %>
         <tr>
-          <td></td>
-          <td><%= flight.code %></td>
+          <td><%= f.radio_button :id, flight.id %></td>
+          <td><%= f.label "id_#{flight.id}", flight.code %></td>
           <td><%= flight.departure_airport.place %></td>
           <td><%= flight.arrival_airport.place %></td>
           <td><%= flight.start %></td>
@@ -46,5 +47,6 @@
         </tr>
       <% end %>  
     </table>
+    <%= f.submit "Book for #{@select_tickets} passengers" %>
   <% end %>
 <% end %>
