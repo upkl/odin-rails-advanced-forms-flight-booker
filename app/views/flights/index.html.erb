@@ -1,0 +1,46 @@
+<h2>Flights</h2>
+
+<% if @flights.exists? %>
+  <table>
+    <tr>
+      <th>Code</th>
+      <th>Departure Airport</th>
+      <th>Destination</th>
+      <th>Start Time</th>
+      <th>Flight Time</th>
+    </tr>
+    <% @flights.each do |flight| %>
+      <tr>
+        <td><%= flight.code %></td>
+        <td><%= flight.arrival_airport.place %></td>
+        <td><%= flight.departure_airport.place %></td>
+        <td><%= flight.start %></td>
+        <td><%= flight.duration %></td>
+      </tr>
+    <% end %>  
+  </table>
+<% end %>
+
+<%= form_with model: Flight.new, method: :get do |f| %>
+  <div>
+  <%= f.label :departure_code, "Departure Airport" %>
+  <%= f.select :departure_code, Airport.all.map { |a| [a.place, a.code] } %>
+  </div>
+
+  <div>
+    <%= f.label :arrival_code, "Arrival Airport" %>
+    <%= f.select :arrival_code, Airport.all.map { |a| [a.place, a.code] } %>
+  </div>
+  
+  <div>
+    <%= f.label :num_tickets, "Number of Passengers" %>
+    <%= f.select :num_tickets, 1..4, selected: 2 %>
+  </div>
+
+  <div>
+    <%= f.label :date %>
+    <%= f.select :date, Flight.all.order(:start).map { |fl| [fl.start_date_readable, fl.start_date_8d] }.uniq %>
+  </div>
+
+  <div><%= f.submit "Search Flights" %></div>
+<% end %>
