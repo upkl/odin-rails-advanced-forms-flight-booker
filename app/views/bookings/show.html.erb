@@ -1,0 +1,22 @@
+<h2>Booking confirmation</h2>
+
+<dl>
+  <dt>Flight code:</dt>
+  <dd><%= @booking.flight.code %></dd>
+  <dt>Date:</dt>
+  <dd><%= @booking.flight.start %></dd>
+  <dt>From:</dt>
+  <dd><%= @booking.flight.departure_airport.place %> (<%= @booking.flight.departure_airport.code %>)</dd>
+  <dt>To:</dt>
+  <dd><%= @booking.flight.arrival_airport.place %> (<%= @booking.flight.arrival_airport.code %>)</dd>
+  <dt>Start date and time:</dt>
+  <dd><%= @booking.flight.start %></dd>
+  <dt>Flight duration:</dt>
+  <dd><%= @booking.flight.duration %></dd>
+  <% @booking.passengers.each_with_index do |passenger, i| %>
+    <dt><%= "Passenger #{i + 1}:" %></dt>
+    <dd><%= "#{passenger.name} (#{passenger.email})" %></dd>
+  <% end %>
+</dl>
+
+<%= link_to "Back to flight list", flights_path %>

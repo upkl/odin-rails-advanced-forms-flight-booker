@@ -1,1 +1,36 @@
 <h2>Booking <%= @num_tickets %> Tickets for <%= @flight.code %></h2>
+
+<% if @booking.errors.any? %>
+<div style="color: red">
+  <h2><%= pluralize(@booking.errors.count, "error") %> prohibited this booking from being saved:</h2>
+
+  <ul>
+    <% @booking.errors.each do |error| %>
+      <li><%= error.full_message %></li>
+    <% end %>
+  </ul>
+</div>
+<% end %>
+
+<%= form_with model: @booking do |f| %>
+  <%= f.hidden_field :flight_id, value: @flight.id %>
+  <p>
+    Flight from <strong><%= @flight.departure_airport.place %></strong>
+    to <strong><%= @flight.arrival_airport.place %></strong>
+  </p>
+  <dl>
+    <dt>Date:</dt>
+    <dd><%= @flight.start %></dd>
+    <dt>Number of tickets:</dt>
+    <dd><%= @num_tickets %></dd>
+  </dl>
+  <%= f.fields_for :passengers do |pf| %>
+    <h3>Data for Passenger #<%= pf.index + 1 %></h3>
+    <%= pf.label :name %>
+    <%= pf.text_field :name %>
+    <%= pf.label :email %>
+    <%= pf.email_field :email %>
+  <% end %>
+
+  <div><%= f.submit %></div>
+<% end %>

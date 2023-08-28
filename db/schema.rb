@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_27_175122) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_27_185621) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -40,7 +40,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_27_175122) do
     t.index ["code"], name: "index_flights_on_code"
   end
 
+  create_table "passengers", force: :cascade do |t|
+    t.bigint "booking_id", null: false
+    t.string "email", null: false
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id"], name: "index_passengers_on_booking_id"
+  end
+
   add_foreign_key "bookings", "flights"
   add_foreign_key "flights", "airports", column: "arrival_airport_id"
   add_foreign_key "flights", "airports", column: "departure_airport_id"
+  add_foreign_key "passengers", "bookings"
 end
