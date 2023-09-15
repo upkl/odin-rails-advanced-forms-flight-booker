@@ -1,4 +1,4 @@
-<h2>Booking <%= @num_tickets %> Tickets for <%= @flight.code %></h2>
+<h2>Booking Tickets for <%= @flight.code %></h2>
 
 <% if @booking.errors.any? %>
 <div style="color: red">
@@ -12,7 +12,7 @@
 </div>
 <% end %>
 
-<%= form_with model: @booking do |f| %>
+<%= form_with model: @booking, html: { 'data-controller' => 'list', 'data-action' => 'button:remove->list#remove', 'data-list-next-passenger-value' => @num_tickets, 'data-list-num-tickets-value' => @num_tickets } do |f| %>
   <%= f.hidden_field :flight_id, value: @flight.id %>
   <p>
     Flight from <strong><%= @flight.departure_airport.place %></strong>
@@ -22,15 +22,40 @@
     <dt>Date:</dt>
     <dd><%= @flight.start %></dd>
     <dt>Number of tickets:</dt>
-    <dd><%= @num_tickets %></dd>
+    <dd data-list-target="numTicketsDisplay">
+      <%= @num_tickets %>
+    </dd>
   </dl>
   <%= f.fields_for :passengers do |pf| %>
-    <h3>Data for Passenger #<%= pf.index + 1 %></h3>
-    <%= pf.label :name %>
-    <%= pf.text_field :name %>
-    <%= pf.label :email %>
-    <%= pf.email_field :email %>
+    <div data-list-target="passenger" class="passenger-<%= pf.index %>">
+      <h3 class="passenger-data">Data for Passenger #<span><%= pf.index + 1 %></span></h3>
+      <%= pf.label :name %>
+      <%= pf.text_field :name %>
+      <%= pf.label :email %>
+      <%= pf.email_field :email %>
+      <button class="remove" data-controller="button" data-button-number-value="<%= pf.index %>" data-action="button#removeme:prevent list:buttonStates@window->button#changeState">
+        Remove this passsenger
+      </button>
+    </div>
   <% end %>
+  <template class="passenger-template">
+    <div data-list-target="passenger" class="passenger-§">
+      <h3 class="passenger-data">Data for Passenger #§§</h3>
+      <label for="booking_passengers_attributes_§_name">Name</label>
+      <input type="text" name="booking[passengers_attributes][§][name]" id="booking_passengers_attributes_§_name" />
+      <label for="booking_passengers_attributes_§_email">Email</label>
+      <input type="email" name="booking[passengers_attributes][§][email]" id="booking_passengers_attributes_§_email" />
+      <button class="remove" data-controller="button" data-button-number-value="§" data-action="button#removeme:prevent list:buttonStates@window->button#changeState">
+        Remove this passsenger
+      </button>
+    </div>
+  </template>
+
+  <div>
+    <button class="add" data-action="list#add:prevent list:buttonStates@window->button#changeState" data-controller="button">
+      Add another passsenger
+    </button>
+  </div>
 
   <div><%= f.submit %></div>
 <% end %>
