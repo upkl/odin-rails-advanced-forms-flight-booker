@@ -2,7 +2,6 @@
 
 class BookingsController < ApplicationController
   def new
-    p 'AA', params
     @booking = Booking.new(flight_id: params[:id])
 
     @num_tickets = params[:num_tickets].to_i
@@ -16,6 +15,9 @@ class BookingsController < ApplicationController
     @booking = Booking.new(booking_params)
 
     if @booking.save
+      @booking.passengers.each do |passenger|
+        PassengerMailer.with(passenger: passenger).registration_email.deliver_later
+      end
       redirect_to @booking
     else
       @num_tickets = booking_params[:passengers_attributes].keys.length

@@ -1,0 +1,18 @@
+Welcome, <%= @passenger.name %>!
+
+Your flight has been booked:
+
+Flight code:
+  <%= @passenger.booking.flight.code %>
+Date:
+  <%= @passenger.booking.flight.start %>
+From:
+  <%= @passenger.booking.flight.departure_airport.place %> (<%= @passenger.booking.flight.departure_airport.code %>)
+To:
+  <%= @passenger.booking.flight.arrival_airport.place %> (<%= @passenger.booking.flight.arrival_airport.code %>)
+Start date and time:
+  <%= @passenger.booking.flight.start %></dd>
+Flight duration:
+  <%= @passenger.booking.flight.duration %></dd>
+
+Review data on our website: <%= @url %>

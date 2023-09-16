@@ -1,0 +1,22 @@
+<h1>
+  Welcome, <%= @passenger.name %>!
+</h1>
+
+<p>Your flight has been booked:</p>
+
+<dl>
+  <dt>Flight code:</dt>
+  <dd><%= @passenger.booking.flight.code %></dd>
+  <dt>Date:</dt>
+  <dd><%= @passenger.booking.flight.start %></dd>
+  <dt>From:</dt>
+  <dd><%= @passenger.booking.flight.departure_airport.place %> (<%= @passenger.booking.flight.departure_airport.code %>)</dd>
+  <dt>To:</dt>
+  <dd><%= @passenger.booking.flight.arrival_airport.place %> (<%= @passenger.booking.flight.arrival_airport.code %>)</dd>
+  <dt>Start date and time:</dt>
+  <dd><%= @passenger.booking.flight.start %></dd>
+  <dt>Flight duration:</dt>
+  <dd><%= @passenger.booking.flight.duration %></dd>
+</dl>
+
+<%= link_to "Review data on our website", @url %>
